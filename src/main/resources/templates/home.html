@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="section/head ::head">
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+
+<body class="container" style="min-height: 100vh; display: flex; flex-direction: column;">
+<header th:insert="section/header ::header" ></header>
+<main class="min-h-screen" style="flex: 1 1 auto">
+    <h1>Welcome to Your Online Diary!</h1>
+    <p>Express yourself, capture your thoughts, and relive your memories with our Online Diary.</p>
+    <p>Create, edit, and organize your diaries with ease. Explore the features below to enhance your diary experience.</p>
+    <h5>Why do you need this site? How will it help you?</h5>
+    <p>This site provides a convenient platform to create and manage your personal diary. It helps you organize your thoughts, reflect on your experiences, and preserve your memories in a digital format.</p>
+    <section>
+        <h2>Key Features</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; padding-top: 30px">
+        <div class="card" style="width: 300px; padding: 10px">
+            <h3>Diary Management</h3>
+            <p>Create, edit, and delete diaries effortlessly. Organize your entries with user-friendly controls.</p>
+        </div>
+
+        <div class="card" style="width: 300px; padding: 10px">
+            <h3>Search Functionality</h3>
+            <p>Quickly find specific entries with our powerful search feature. Navigate through your memories with ease.</p>
+        </div>
+
+        <div class="card" style="width: 300px; padding: 10px">
+            <h3>Media Integration</h3>
+            <p>Enrich your diary entries with text, images, and multimedia files. Capture moments in various formats.</p>
+        </div>
+
+        <div class="card" style="width: 300px; padding: 10px">
+            <h3>Tagging System</h3>
+            <p>Organize your diaries using a tagging system. Attach relevant tags to easily categorize and filter your entries.</p>
+        </div>
+
+        <div class="card" style="width: 300px; padding: 10px">
+            <h3>Collaboration</h3>
+            <p>Invite co-authors to contribute to your diaries. Collaborate with friends, family, or fellow enthusiasts.</p>
+        </div>
+
+        <div class="card" style="width: 300px; padding: 10px">
+            <h3>Archiving and Restoration</h3>
+            <p>Move diaries to the archive for safekeeping. Easily restore diaries when needed. Customize archiving settings.</p>
+        </div>
+
+        <div class="card" style="width: 300px; padding: 10px">
+            <h3>User Settings</h3>
+            <p>Configure diary archive retention duration in user settings. Tailor the app to your individual preferences.</p>
+        </div>
+
+            <div class="card" style="width: 300px; padding: 10px">
+                <h3>User Lorem</h3>
+                <p>Configure diary archive retention duration in user settings. Tailor the app to your individual preferences.</p>
+            </div>
+        </div>
+    </section>
+    <section style="padding-top: 30px">
+        <h2>Our Contacts</h2>
+        <p>We'd love to hear from you! Reach out to us for any inquiries or assistance.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; padding-top: 30px">
+        <div class="card" style="width: 300px; padding: 10px">
+            <h3>Contact Information</h3>
+            <p>Email: info@onlinediary.com</p>
+            <p>Phone: +1 (123) 456-7890</p>
+            <p>Address: 123 Diary Lane, Online City, OC 56789</p>
+        </div>
+        <div class="card" style="width: 300px; padding: 10px">
+            <h3>Customer Support</h3>
+            <p>If you have any questions or need help, our customer support team is ready to assist you.</p>
+            <p>Email: support@onlinediary.com</p>
+            <p>Phone: +1 (800) 123-4567</p>
+        </div>
+        </div>
+    </section>
+
+</main>
+<footer th:insert="section/footer ::footer"></footer>
+</body>
+</html>
