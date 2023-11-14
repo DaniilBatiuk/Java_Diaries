@@ -1,9 +1,6 @@
 package com.example.result.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,4 +17,8 @@ public class Tag {
     private Long id;
 
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "journal_id")
+    private Journal journal;
 }

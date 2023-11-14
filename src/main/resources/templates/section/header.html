@@ -7,10 +7,16 @@
 
     <ul class="nav nav-pills">
         <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-        <li class="nav-item"><a href="/diaries" class="nav-link">Diaries</a></li>
-        <li class="nav-item"><a href="/diariesCreate" class="nav-link">Create note</a></li>
-        <li class="nav-item"><a href="/registration" class="nav-link">Register</a></li>
-        <li class="nav-item"><a href="/login"  class="nav-link active">Login</a></li>
+        <th:block th:if="${authenticated}">
+            <li class="nav-item"><a href="/diaries" class="nav-link">Diaries</a></li>
+            <li class="nav-item"><a href="/diariesCreate" class="nav-link">Create diary</a></li>
+            <li class="nav-item"><a href="/tagsCreate" class="nav-link">Create tag</a></li>
+            <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+        </th:block>
+        <th:block th:unless="${authenticated}">
+            <li class="nav-item"><a href="/registration" class="nav-link">Register</a></li>
+            <li class="nav-item"><a href="/login" class="nav-link active">Login</a></li>
+        </th:block>
     </ul>
 
 </div>

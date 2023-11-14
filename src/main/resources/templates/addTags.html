@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="section/head ::head">
+    <meta charset="UTF-8">
+    <title>Add Tags</title>
+</head>
+
+<body class="container" style="min-height: 100vh; display: flex; flex-direction: column;">
+<header th:insert="section/header ::header" ></header>
+<main class="min-h-screen" style="flex: 1 1 auto">
+    <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+        <tr>
+            <th class="py-2 px-4 border-b">Name</th>
+            <th class="py-2 px-4 border-b">Add</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tag : ${tags}">
+            <td class="py-2 px-4 border-b" th:text="${tag.name}"></td>
+            <td class="py-2 px-4 border-b"><form th:action="@{/addTags/{id}/{journalId}(id=${tag.id},journalId=${journal.id})}" method="post"><button type="submit">Add Tag</button></form></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+<footer th:insert="section/footer ::footer"></footer>
+</body>
+</html>

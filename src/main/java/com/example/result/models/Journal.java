@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.security.KeyStore;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -29,16 +32,16 @@ public class Journal {
 
     private boolean archived;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate archiveTimestamp;
+
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User owner;
 
-    @ManyToMany
-    @JoinTable(
-            name = "journal_tags",
-            joinColumns = @JoinColumn(name = "journal_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
+    @OneToMany
+    @JoinColumn(name = "journal_id")
     private Set<Tag> tags;
 
     @ManyToMany

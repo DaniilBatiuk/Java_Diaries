@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="section/head ::head">
+    <meta charset="UTF-8">
+    <title>Archive</title>
+</head>
+
+<body class="container" style="min-height: 100vh; display: flex; flex-direction: column;">
+<header th:insert="section/header ::header" ></header>
+<main class="min-h-screen" style="flex: 1 1 auto">
+    <div class="w-1/3 bg-white p-8 border rounded shadow-md" style="display: flex; flex-direction: column; align-items: center">
+        <h2 class="text-2xl mb-4">Update Diary</h2>
+        <form th:action="@{/archive/{id}(id=${journal.id})}" th:object="${journal}" method="post" style="display: flex; flex-direction: column; align-items:flex-end; width: 320px; flex-wrap: wrap">
+            <div class="mb-4">
+                <label for="archiveTimestamp" class="block text-gray-700">Archive Date:</label>
+                <input type="date" id="archiveTimestamp" name="archiveTimestamp" th:field="*{archiveTimestamp}"/>
+            </div>
+            <button type="submit" class="bg-blue-500 px-4 py-2 rounded" style="margin-top: 20px">Archive Diary</button>
+        </form>
+    </div>
+</main>
+<footer th:insert="section/footer ::footer"></footer>
+</body>
+</html>
