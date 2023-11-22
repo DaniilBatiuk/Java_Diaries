@@ -44,11 +44,9 @@ public class Journal {
     @JoinColumn(name = "journal_id")
     private Set<Tag> tags;
 
-    @ManyToMany
-    @JoinTable(
-            name = "journal_collaborators",
-            joinColumns = @JoinColumn(name = "journal_id"),
-            inverseJoinColumns = @JoinColumn(name = "collaborator_id")
-    )
-    private Set<User> collaborators;
+
+    @ManyToOne
+    @JoinColumn(name = "collaborator_id")
+    private User collaborator;
+
 }

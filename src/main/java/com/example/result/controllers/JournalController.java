@@ -1,8 +1,10 @@
 package com.example.result.controllers;
 import com.example.result.models.Journal;
+import com.example.result.models.Tag;
 import com.example.result.models.User;
 import com.example.result.repositories.JournalRepository;
 import com.example.result.repositories.UserRepository;
+import com.fasterxml.jackson.databind.util.ArrayIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +58,7 @@ public class JournalController {
         }
         List<Journal> searchResults = journalRepository.findByTitleContainingIgnoreCase(updatedJournal.getTitle());
         if (!searchResults.isEmpty()) {
-            if ((!(searchResults.get(0).getId() == updatedJournal.getId()) && searchResults.get(0).getTitle().equals(updatedJournal.getTitle()))) {
+            if ((searchResults.get(0).getId().longValue() != updatedJournal.getId().longValue()) && searchResults.get(0).getTitle().equals(updatedJournal.getTitle())) {
                 bindingResult.rejectValue("photoLink", "error.journal", "Diary with this title is already exist");
                 model.addAttribute("journal", updatedJournal);
                 return "update";
@@ -76,6 +79,15 @@ public class JournalController {
     public String deleteJournal(@PathVariable Long id) {
         journalRepository.deleteById(id);
         return "redirect:/diaries";
+    }
+
+    @GetMapping("/journal/{id}")
+    public String Journal(@PathVariable Long id, Model model, @CookieValue(value = "userId", required = false) String userId){
+        boolean authenticated = isAuthenticated(userId);
+        model.addAttribute("authenticated", authenticated);
+        Optional<Journal> a = journalRepository.findById(id);
+        model.addAttribute("journal", a);
+        return "journal";
     }
 
 
@@ -111,8 +123,13 @@ public class JournalController {
             }
         }
 
-        Iterable<Journal> updatedJournals = journalRepository.findByOwner_Id(Long.valueOf(userId));
-
+        List<Journal> updatedJournals = journalRepository.findByOwner_Id(Long.valueOf(userId));
+        List<Journal> allJournals = (List<Journal>) journalRepository.findAll();
+        for (Journal journal : allJournals) {
+            if (journal.getCollaborator() != null && journal.getCollaborator().getId() == Long.valueOf(userId)){
+                updatedJournals.add(journal);
+            }
+        }
         model.addAttribute("journals", updatedJournals);
         return "diaries";
     }
@@ -122,17 +139,29 @@ public class JournalController {
     public String searchJournals(@RequestParam(name = "title", required = false) String title, Model model, @CookieValue(value = "userId", required = false) String userId){
         boolean authenticated = isAuthenticated(userId);
         model.addAttribute("authenticated", authenticated);
-        List<Journal> searchResults;
+        List<Journal> byOwn = journalRepository.findByOwner_Id(Long.valueOf(userId));
+        List<Journal> allJournals = (List<Journal>) journalRepository.findAll();
+        List<Journal> searchResults = new ArrayList<Journal>();
+        List<Journal> res = new ArrayList<Journal>();
+        for (Journal journal : allJournals) {
+            if (journal.getCollaborator() != null && journal.getCollaborator().getId() == Long.valueOf(userId)){
+                byOwn.add(journal);
+            }
+        }
 
         if (title != null && !title.isEmpty()) {
             searchResults = journalRepository.findByTitleContainingIgnoreCase(title);
+            for (Journal journal : byOwn) {
+                if (searchResults.contains(journal)){
+                    res.add(journal);
+                }
+            }
         } else {
-            searchResults = (List<Journal>) journalRepository.findAll();
-            model.addAttribute("journals", searchResults);
+            model.addAttribute("journals", byOwn);
             return "redirect:/diaries";
         }
 
-        model.addAttribute("journals", searchResults);
+        model.addAttribute("journals", res);
         return "search";
     }
 
@@ -181,4 +210,48 @@ public class JournalController {
     private boolean isAuthenticated(@CookieValue(value = "userId", required = false) String userId) {
         return userId != null;
     }
+
+
+    @GetMapping("/addCollaborant/{id}")
+    public String addCollaborant(@PathVariable Long id, Model model, @CookieValue(value = "userId", required = false) String userId){
+        boolean authenticated = isAuthenticated(userId);
+        model.addAttribute("authenticated", authenticated);
+
+        Optional<Journal> journalOptional = journalRepository.findById(id);
+        Iterable<User> users = userRepository.findAll();
+        List<User> users2 = new ArrayList<User>();
+
+        for (User user : users) {
+            if (user.getId() != Long.valueOf(userId)) {
+                users2.add(user);
+            }
+        }
+
+        if (journalOptional.isPresent()) {
+            Journal journal = journalOptional.get();
+            model.addAttribute("journal", journal);
+            model.addAttribute("users", users2);
+            return "addcollaborant";
+        } else {
+            return "diaries";
+        }
+    }
+
+    @PostMapping("/addCollaborant/{id}/{journalId}")
+    public String postAddTags(@PathVariable Long id, @PathVariable Long journalId, Model model) {
+        Optional<Journal> journalOptional = journalRepository.findById(journalId);
+        Optional<User> user = userRepository.findById(id);
+
+        if (journalOptional.isPresent()) {
+            Journal journal = journalOptional.get();
+            journal.setCollaborator(user.get());
+
+            journalRepository.save(journal);
+
+            return "redirect:/diaries";
+        } else {
+            return "redirect:/diaries";
+        }
+    }
+
 }
